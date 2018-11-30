@@ -83,7 +83,11 @@ package.json
 ---
 
 3. Vue file
+<code>02c7dd2 - Init nuxt-app</code>
 https://vuejs.org/v2/guide/single-file-components.html
+
+<small>
+
 ```vue
 <template>
   <pre class="hoho">{{ haha }}</pre>
@@ -107,3 +111,9 @@ export default {
 .hoho { color: red; }
 </style>
 ```
+
+</small>
+
+---
+
+4. Clean up pages

@@ -3,7 +3,14 @@
     <h1>books</h1>
     <v-btn @click="addRandomBook()">add random book</v-btn>
     <v-btn @click="books = []">clear</v-btn>
-    <pre class="hoho">{{ books }}</pre>
+    <ul>
+      <li v-for="(d, i) in books" :key="i">
+        <span class="text-capitalize">[{{ d.Author }}]</span>
+        <span class="text-capitalize">{{ d.Title }}</span>
+        ({{ d.CreatedAt | moment('from') }})
+      </li>
+    </ul>
+    <!-- <pre class="hoho">{{ books }}</pre> -->
   </v-container>
 </template>
 

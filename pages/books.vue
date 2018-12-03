@@ -2,7 +2,7 @@
   <v-container>
     <h1>books</h1>
     <v-btn @click="addRandomBook()">add random book</v-btn>
-    <v-btn @click="clearBooks()">clear</v-btn>
+    <v-btn @click="fetchBooks()">fetch books</v-btn>
     <ul>
       <li v-for="(d, i) in books" :key="i">
         <span class="text-capitalize">[{{ d.Author }}]</span>
@@ -15,27 +15,29 @@
 
 <script>
 import rWords from 'random-words'
-import store from 'store'
 const debug = require('debug')('pages/books')
 
 export default {
   data() {
     return {
-      books: store.get('books') || []
+      timeout: null,
+      books: []
     }
   },
+  mounted() {
+    this.loadData()
+  },
+  beforeDestroy() {
+    if (this.timeout) clearTimeout(this.timeout)
+  },
   methods: {
-    addBook(d) {
-      let baseBook = {
-        Author: '',
-        Title: '',
-        Content: '',
-        CreatedAt: new Date(),
-        UpdatedAt: null,
-        PublishedAt: new Date()
-      }
-      this.books.push(Object.assign(baseBook, d))
-      store.set('books', this.books)
+    loadData() {
+      this.fetchBooks()
+      this.timeout = setTimeout(this.loadData, 10e3)
+    },
+    async addBook(d) {
+      let { data } = await this.$axios.post('http://localhost:3010/books', d)
+      this.books.push(data)
     },
     addRandomBook() {
       this.addBook({
@@ -43,9 +45,9 @@ export default {
         Title: rWords({ min: 3, max: 10, join: ' ' })
       })
     },
-    clearBooks() {
-      this.books = []
-      store.remove('books')
+    async fetchBooks() {
+      let { data } = await this.$axios.get('http://localhost:3010/books')
+      this.books = data
     }
   }
 }

@@ -177,8 +177,9 @@ methods: {
 
 ---
 
-#### 5-3. Store books to localStorage
+#### 5-3. Store books to localStorage  `commit b3b539a`
 
+pages/books.vue
 ```vue
 import store from 'store'
 
@@ -192,4 +193,32 @@ store.set('books', this.books)
 // clearBooks()
 this.books = []
 store.remove('books')
+```
+
+---
+
+#### 5-4. Using REST api
+
+books-go/main.go
+```bash
+$ go build books-go/main.go
+$ ./main
+# localhost:3010
+# POST /books
+# GET /books
+# PUT /books/:id
+# DELETE /books/:id
+```
+
+pages/books.vue
+```vue
+async addBook(d) {
+  let { data } = await this.$axios.post('http://localhost:3010/books', d)
+  this.books.push(data)
+},
+
+async fetchBooks() {
+  let { data } = await this.$axios.get('http://localhost:3010/books')
+  this.books = data
+}
 ```

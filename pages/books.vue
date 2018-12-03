@@ -15,14 +15,19 @@
 
 <script>
 import rWords from 'random-words'
+import { mapActions, mapGetters } from 'vuex'
 const debug = require('debug')('pages/books')
 
 export default {
   data() {
     return {
-      timeout: null,
-      books: []
+      timeout: null
     }
+  },
+  computed: {
+    ...mapGetters({
+      books: 'store00/books'
+    })
   },
   mounted() {
     this.loadData()
@@ -31,23 +36,19 @@ export default {
     if (this.timeout) clearTimeout(this.timeout)
   },
   methods: {
+    ...mapActions({
+      fetchBooks: 'store00/fetchBooks',
+      addBook: 'store00/addBook'
+    }),
     loadData() {
       this.fetchBooks()
       this.timeout = setTimeout(this.loadData, 10e3)
-    },
-    async addBook(d) {
-      let { data } = await this.$axios.post('http://localhost:3010/books', d)
-      this.books.push(data)
     },
     addRandomBook() {
       this.addBook({
         Author: rWords({ exactly: 2, join: ' ' }),
         Title: rWords({ min: 3, max: 10, join: ' ' })
       })
-    },
-    async fetchBooks() {
-      let { data } = await this.$axios.get('http://localhost:3010/books')
-      this.books = data
     }
   }
 }

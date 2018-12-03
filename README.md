@@ -197,7 +197,7 @@ store.remove('books')
 
 ---
 
-#### 5-4. Using REST api
+#### 5-4. Using REST api  `commit 64c7259`
 
 books-go/main.go
 ```bash
@@ -221,4 +221,32 @@ async fetchBooks() {
   let { data } = await this.$axios.get('http://localhost:3010/books')
   this.books = data
 }
+```
+
+---
+
+#### 5-5. Using vuex
+
+store/store00.js
+```javascript
+export const state = () => ({ .. })
+export const mutations = { .. }
+export const actions = { .. }
+export const getters = { .. }
+```
+
+pages/books.vue
+```vue
+import { mapActions, mapGetters } from 'vuex'
+
+// computed
+  ...mapGetters({
+    books: 'store00/books'
+  })
+
+// methods
+  ...mapActions({
+    fetchBooks: 'store00/fetchBooks',
+    addBook: 'store00/addBook'
+  })
 ```

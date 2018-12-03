@@ -38,7 +38,7 @@ $ yarn run generate
 
 ---
 
-### 1. Initialize
+### 1. Initialize node.js, nuxt
 
 ```bash
 # install nodejs (LTS v8 or v10) https://nodejs.org
@@ -250,3 +250,12 @@ import { mapActions, mapGetters } from 'vuex'
     addBook: 'store00/addBook'
   })
 ```
+
+---
+
+Next ...
+
+- v-datatable
+- v-dialog
+- toast
+- Keycloak

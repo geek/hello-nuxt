@@ -2,7 +2,7 @@
   <v-container>
     <h1>books</h1>
     <v-btn @click="addRandomBook()">add random book</v-btn>
-    <v-btn @click="books = []">clear</v-btn>
+    <v-btn @click="clearBooks()">clear</v-btn>
     <ul>
       <li v-for="(d, i) in books" :key="i">
         <span class="text-capitalize">[{{ d.Author }}]</span>
@@ -10,18 +10,18 @@
         ({{ d.CreatedAt | moment('from') }})
       </li>
     </ul>
-    <!-- <pre class="hoho">{{ books }}</pre> -->
   </v-container>
 </template>
 
 <script>
 import rWords from 'random-words'
+import store from 'store'
 const debug = require('debug')('pages/books')
 
 export default {
   data() {
     return {
-      books: []
+      books: store.get('books') || []
     }
   },
   methods: {
@@ -35,12 +35,17 @@ export default {
         PublishedAt: new Date()
       }
       this.books.push(Object.assign(baseBook, d))
+      store.set('books', this.books)
     },
     addRandomBook() {
       this.addBook({
         Author: rWords({ exactly: 2, join: ' ' }),
         Title: rWords({ min: 3, max: 10, join: ' ' })
       })
+    },
+    clearBooks() {
+      this.books = []
+      store.remove('books')
     }
   }
 }

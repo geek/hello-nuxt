@@ -135,7 +135,7 @@ export default {
 
 ---
 
-#### 5-1. Create / Delete All
+#### 5-1. Create / Delete All `commit 6c9cbc8`
 
 ![screenshot](static/forREADME/books01.png)
 
@@ -157,4 +157,39 @@ methods: {
   addBook(d) { ... },
   addRandomBook() { ... }
 }
+```
+
+---
+
+#### 5-2. v-for and plug-in 'vue-moment'  `commit ffab371`
+
+![screenshot](static/forREADME/books02.png)
+
+```vue
+<ul>
+  <li v-for="(d, i) in books" :key="i">
+    <span class="text-capitalize">[{{ d.Author }}]</span>
+    <span class="text-capitalize">{{ d.Title }}</span>
+    ({{ d.CreatedAt | moment('from') }})
+  </li>
+</ul>
+```
+
+---
+
+#### 5-3. Store books to localStorage
+
+```vue
+import store from 'store'
+
+// data
+books: store.get('books') || []
+
+// addBook()
+this.books.push(Object.assign(baseBook, d))
+store.set('books', this.books)
+
+// clearBooks()
+this.books = []
+store.remove('books')
 ```

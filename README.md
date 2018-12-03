@@ -38,7 +38,7 @@ $ yarn run generate
 
 ---
 
-1. Initialize
+### 1. Initialize
 
 ```bash
 # install nodejs (LTS v8 or v10) https://nodejs.org
@@ -65,7 +65,7 @@ $ yarn run dev
 
 ---
 
-2. Nuxt Directory Structure
+### 2. Nuxt Directory Structure
 https://nuxtjs.org/guide/directory-structure
 ```bash
 assets/
@@ -82,8 +82,7 @@ package.json
 
 ---
 
-3. Vue file
-<code>02c7dd2 - Init nuxt-app</code>
+### 3. Vue file `commit 02c7dd2`
 https://vuejs.org/v2/guide/single-file-components.html
 
 <small>
@@ -116,4 +115,46 @@ export default {
 
 ---
 
-4. Clean up pages
+### 4. Clean up pages `commit 2b041d5`
+
+### 5. Simple CRUD page: /books
+
+```javascript
+// a book
+{
+  'Author': String,
+  'Title': String,
+  'Content': String,
+  'CreatedAt': Date,
+  'UpdatedAt': Date,
+  'PublishedAt': Date
+}
+```
+
+	$ yarn add random-words debug
+
+---
+
+#### 5-1. Create / Delete All
+
+![screenshot](static/forREADME/books01.png)
+
+---
+
+/pages/books.vue
+```vue
+<v-btn @click="addRandomBook()">add random book</v-btn>
+<v-btn @click="books = []">clear</v-btn>
+<pre class="hoho">{{ books }}</pre>
+```
+```vue
+data() {
+  return {
+    books: []
+  }
+},
+methods: {
+  addBook(d) { ... },
+  addRandomBook() { ... }
+}
+```

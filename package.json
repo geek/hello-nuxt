@@ -16,6 +16,7 @@
     "@nuxtjs/axios": "^5.0.0",
     "cross-env": "^5.2.0",
     "debug": "^4.1.0",
+    "lodash": "^4.17.11",
     "nuxt": "^2.0.0",
     "random-words": "^1.1.0",
     "store": "^2.0.12",

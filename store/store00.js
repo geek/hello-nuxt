@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export const state = () => ({
   books: []
 })
@@ -8,6 +10,11 @@ export const mutations = {
   },
   ADD_BOOK(state, data) {
     state.books.push(data)
+  },
+  REMOVE_BOOK(state, data) {
+    _.remove(state.books, ['ID', data.ID])
+    state.books.push({})
+    state.books.pop()
   }
 }
 
@@ -19,6 +26,12 @@ export const actions = {
   async addBook({ commit }, d) {
     let { data } = await this.$axios.post('http://localhost:3010/books', d)
     commit('ADD_BOOK', data)
+  },
+  async removeBook({ commit }, d) {
+    let { data } = await this.$axios.delete(
+      `http://localhost:3010/books/${d.ID}`
+    )
+    commit('REMOVE_BOOK', d)
   }
 }
 

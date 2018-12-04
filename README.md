@@ -12,6 +12,7 @@
 
 [Vue Router](https://router.vuejs.org) - the official router for Vue.js.
 [Vuex](https://vuex.vuejs.org) - a state management pattern + library for Vue.js.
+[lodash](https://lodash.com) - A modern JavaScript utility library delivering modularity, performance & extras.
 
 ---
 
@@ -65,7 +66,7 @@ $ yarn run dev
 
 ---
 
-### 2. Nuxt Directory Structure
+### 2. Overview Nuxt
 
 https://nuxtjs.org/guide/directory-structure
 
@@ -84,7 +85,7 @@ package.json
 
 ---
 
-### 3. Vue file `commit 02c7dd2`
+### 3. .vue `commit 02c7dd2`
 
 https://vuejs.org/v2/guide/single-file-components.html
 
@@ -118,7 +119,7 @@ export default {
 
 ---
 
-### 4. Clean up pages `commit 2b041d5`
+### 4. Clean up sample pages `commit 2b041d5`
 
 ### 5. Simple CRUD page: /books
 
@@ -138,7 +139,7 @@ export default {
 
 ---
 
-#### 5-1. Create / Delete All `commit 6c9cbc8`
+#### 5-1. Store to data() `commit 6c9cbc8`
 
 ![screenshot](static/forREADME/books01.png)
 
@@ -166,7 +167,7 @@ methods: {
 
 ---
 
-#### 5-2. v-for and plug-in 'vue-moment'  `commit ffab371`
+#### 5-2. v-for, vue-moment  `commit ffab371`
 
 ![screenshot](static/forREADME/books02.png)
 
@@ -182,7 +183,7 @@ methods: {
 
 ---
 
-#### 5-3. Store books to localStorage  `commit b3b539a`
+#### 5-3. Store to localStorage  `commit b3b539a`
 
 pages/books.vue
 
@@ -203,7 +204,7 @@ store.remove('books')
 
 ---
 
-#### 5-4. Using REST api  `commit 64c7259`
+#### 5-4. Store to backend - REST API  `commit 64c7259`
 
 books-go/main.go
 
@@ -233,7 +234,7 @@ async fetchBooks() {
 
 ---
 
-#### 5-5. Using vuex
+#### 5-5. vuex
 
 store/store00.js
 
@@ -352,9 +353,102 @@ data() {
 
 ---
 
+#### 5-7. v-dialog
+
+https://vuetifyjs.com/en/components/dialogs
+
+![screenshot](static/forREADME/books04.png)
+
+---
+
+pages/books.vue
+
+```html
+<v-dialog v-model="dialogAdd" max-width="400">
+  ...
+</v-dialog>
+```
+
+```javascript
+// data
+dialogAdd: false,
+newBook: { Title: '', Author: '' },
+
+// methods
+submitFormAdd() {
+  this.addBook(this.newBook)
+  this.dialogAdd = false
+},
+```
+
+---
+
+![screenshot](static/forREADME/books05.png)
+
+pages/books.vue - template
+
+```html
+<td>
+  <v-btn
+    flat small color="red" 
+    @click="openRemoveDialog(props.item)"
+  >Remove</v-btn>
+></td>
+
+<v-dialog v-model="dialogRemove" max-width="400">
+  ...
+</v-dialog>
+```
+
+---
+
+pages/books.vue - script
+
+```javascript
+// data
+dialogRemove: false,
+bookToRemove: null
+
+// methods
+openRemoveDialog(d) {
+  this.bookToRemove = d
+  this.dialogRemove = true
+},
+handleRemoveBook() {
+  this.removeBook(this.bookToRemove)
+  this.dialogRemove = false
+}
+```
+
+---
+
+store/store00.js
+
+	$ yarn add lodash
+
+```javascript
+// mutations
+REMOVE_BOOK(state, data) {
+  _.remove(state.books, ['ID', data.ID])
+  state.books.push({})
+  state.books.pop()
+}
+
+// actions
+async removeBook({ commit }, d) {
+  let { data } = await this.$axios.delete(
+    `http://localhost:3010/books/${d.ID}`
+  )
+  commit('REMOVE_BOOK', d)
+}
+```
+
+---
+
 Next ...
 
-- v-dialog
-- toast
-- Keycloak
+- vue-toast
+- keycloak-js
+- nuxt-child
 - grid, flex, display, position
+- components

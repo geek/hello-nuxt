@@ -2,10 +2,11 @@
   <v-container>
     <h1>
       Books
-      <span class="font-weight-light">{{ books.length | '-' }}</span>
+      <span class="font-weight-light">{{ books.length || '-' }}</span>
     </h1>
     <v-layout row wrap>
       <v-flex xs12 md6>
+        <v-btn flat color="primary" @click="dialogAdd = true">add book</v-btn>
         <v-btn flat color="primary" @click="addRandomBook()">add random book</v-btn>
         <v-btn flat color="primary" @click="fetchBooks()">fetch books</v-btn>
       </v-flex>
@@ -25,8 +26,44 @@
         <td class="text-capitalize">{{ props.item.Title }}</td>
         <td class="text-capitalize">{{ props.item.Author }}</td>
         <td>{{ props.item.CreatedAt | moment('from') }}</td>
+        <td><v-btn flat small color="red" @click="openRemoveDialog(props.item)">Remove</v-btn></td>
       </template>
     </v-data-table>
+
+    <v-dialog v-model="dialogAdd" max-width="400">
+      <v-card>
+        <v-card-title class="headline">Create a new Book</v-card-title>
+        <v-form @submit.stop.prevent="submitFormAdd">
+          <v-card-text>
+            <v-text-field v-model="newBook.Title" label="Title" />
+            <v-text-field v-model="newBook.Author" label="Author" />
+          </v-card-text>
+          <v-card-actions>
+            <v-btn flat color="primary" type="button" @click="dialogAdd = false">Cancel</v-btn>
+            <v-spacer />
+            <v-btn flat color="primary" type="submit">Add</v-btn>
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialogRemove" max-width="400">
+      <v-card>
+        <v-card-title class="headline">Remove a Book</v-card-title>
+        <v-card-text class="text-xs-center">
+          Do you want to remove this book?<br/>
+          <b class="text-capitalize">
+            '{{ bookToRemove && bookToRemove.Title }}'
+          </b>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn flat color="primary" type="button" @click="dialogRemove = false">Cancel</v-btn>
+          <v-spacer />
+          <v-btn flat color="primary" type="button" @click="handleRemoveBook()">Remove</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </v-container>
 </template>
 
@@ -43,13 +80,18 @@ export default {
       headers: [
         { text: 'Title', value: 'Title' },
         { text: 'Author', value: 'Author' },
-        { text: 'Created', value: 'CreatedAt' }
+        { text: 'Created', value: 'CreatedAt' },
+        { text: 'Actions' }
       ],
       pagination: {
         descending: true,
         rowsPerPage: -1,
         sortBy: 'CreatedAt'
-      }
+      },
+      dialogAdd: false,
+      dialogRemove: false,
+      newBook: { Title: '', Author: '' },
+      bookToRemove: null
     }
   },
   computed: {
@@ -66,7 +108,8 @@ export default {
   methods: {
     ...mapActions({
       fetchBooks: 'store00/fetchBooks',
-      addBook: 'store00/addBook'
+      addBook: 'store00/addBook',
+      removeBook: 'store00/removeBook'
     }),
     loadData() {
       this.fetchBooks()
@@ -77,6 +120,18 @@ export default {
         Author: rWords({ exactly: 2, join: ' ' }),
         Title: rWords({ min: 3, max: 10, join: ' ' })
       })
+    },
+    submitFormAdd() {
+      this.addBook(this.newBook)
+      this.dialogAdd = false
+    },
+    openRemoveDialog(d) {
+      this.bookToRemove = d
+      this.dialogRemove = true
+    },
+    handleRemoveBook() {
+      this.removeBook(this.bookToRemove)
+      this.dialogRemove = false
     }
   }
 }

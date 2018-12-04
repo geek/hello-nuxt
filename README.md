@@ -85,11 +85,11 @@ package.json
 
 ---
 
-### 3. .vue `commit 02c7dd2`
+### 3. Filetype .vue `commit 02c7dd2`
 
 https://vuejs.org/v2/guide/single-file-components.html
 
-<small>
+<small style="font-size: 70%">
 
 ```vue
 <template>
@@ -117,11 +117,11 @@ export default {
 
 </small>
 
----
-
 ### 4. Clean up sample pages `commit 2b041d5`
 
-### 5. Simple CRUD page: /books
+---
+
+## Simple CRUD page: /books
 
 ```javascript
 // a book
@@ -139,7 +139,7 @@ export default {
 
 ---
 
-#### 5-1. Store to data() `commit 6c9cbc8`
+### 5. Store to data() `commit 6c9cbc8`
 
 ![screenshot](static/forREADME/books01.png)
 
@@ -167,7 +167,7 @@ methods: {
 
 ---
 
-#### 5-2. v-for, vue-moment  `commit ffab371`
+### 6. v-for, vue-moment  `commit ffab371`
 
 ![screenshot](static/forREADME/books02.png)
 
@@ -183,7 +183,7 @@ methods: {
 
 ---
 
-#### 5-3. Store to localStorage  `commit b3b539a`
+### 7. Store to localStorage  `commit b3b539a`
 
 pages/books.vue
 
@@ -204,9 +204,11 @@ store.remove('books')
 
 ---
 
-#### 5-4. Store to backend - REST API  `commit 64c7259`
+### 8. Store to backend - REST API  `commit 64c7259`
 
 books-go/main.go
+
+<small>
 
 ```bash
 $ go build books-go/main.go
@@ -214,9 +216,11 @@ $ ./main
 # localhost:3010
 # POST /books
 # GET /books
-# PUT /books/:id
+# PUT  /books/:id
 # DELETE /books/:id
 ```
+
+</small>
 
 pages/books.vue
 
@@ -234,7 +238,7 @@ async fetchBooks() {
 
 ---
 
-#### 5-5. vuex
+### 9. vuex
 
 store/store00.js
 
@@ -318,7 +322,7 @@ export default {
 
 ---
 
-#### 5-6. v-data-table
+### 10. v-data-table `commit 7476762`
 
 https://vuetifyjs.com/en/components/data-tables
 
@@ -353,7 +357,7 @@ data() {
 
 ---
 
-#### 5-7. v-dialog
+### 11. v-dialog `commit bf60c96`
 
 https://vuetifyjs.com/en/components/dialogs
 
@@ -445,9 +449,46 @@ async removeBook({ commit }, d) {
 
 ---
 
+### 12. izitoast
+
+![screenshot](static/forREADME/books06.png)
+
+	$ yarn add vue-izitoast
+
+plugin/vue-izitoast.js
+
+```javascript
+import Vue from 'vue'
+import VueIziToast from 'vue-izitoast'
+
+import 'izitoast/dist/css/iziToast.css'
+
+Vue.use(VueIziToast)
+```
+---
+
+store/store00.js
+
+```javascript
+async fetchBooks({ commit }) {
+  try {
+    let data = await this.$axios.$get('http://localhost:3010/books')
+    commit('RECEIVE_BOOKS', data)
+  } catch (e) {
+    let message = 'Failed to get books'
+    if (e.response) {
+      message += `<p>${e.response.status}: 
+        ${e.response.data.message}</p>`
+    }
+    this.$toast.error(message)
+  }
+},
+```
+
+---
+
 Next ...
 
-- vue-toast
 - keycloak-js
 - nuxt-child
 - grid, flex, display, position

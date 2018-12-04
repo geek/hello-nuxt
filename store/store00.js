@@ -20,18 +20,42 @@ export const mutations = {
 
 export const actions = {
   async fetchBooks({ commit }) {
-    let { data } = await this.$axios.get('http://localhost:3010/books')
-    commit('RECEIVE_BOOKS', data)
+    try {
+      let data = await this.$axios.$get('http://localhost:3010/books')
+      commit('RECEIVE_BOOKS', data)
+    } catch (e) {
+      let message = 'Failed to get books'
+      if (e.response) {
+        message += `<p>${e.response.status}: ${e.response.data.message}</p>`
+      }
+      this.$toast.error(message)
+    }
   },
   async addBook({ commit }, d) {
-    let { data } = await this.$axios.post('http://localhost:3010/books', d)
-    commit('ADD_BOOK', data)
+    try {
+      let data = await this.$axios.$post('http://localhost:3010/books', d)
+      commit('ADD_BOOK', data)
+      this.$toast.success('Added')
+    } catch (e) {
+      let message = 'Failed to add book'
+      if (e.response) {
+        message += `<p>${e.response.status}: ${e.response.data.message}</p>`
+      }
+      this.$toast.error(message)
+    }
   },
   async removeBook({ commit }, d) {
-    let { data } = await this.$axios.delete(
-      `http://localhost:3010/books/${d.ID}`
-    )
-    commit('REMOVE_BOOK', d)
+    try {
+      await this.$axios.$delete(`http://localhost:3010/books/${d.ID}`)
+      commit('REMOVE_BOOK', d)
+      this.$toast.success('Removed')
+    } catch (e) {
+      let message = 'Failed to remove book'
+      if (e.response) {
+        message += `<p>${e.response.status}: ${e.response.data.message}</p>`
+      }
+      this.$toast.error(message)
+    }
   }
 }
 

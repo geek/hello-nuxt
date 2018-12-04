@@ -36,7 +36,8 @@ module.exports = {
   */
   plugins: [
     '@/plugins/vuetify',
-    '@/plugins/vue-moment'
+    '@/plugins/vue-moment',
+    '@/plugins/vue-izitoast'
   ],
 
   /*

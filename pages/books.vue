@@ -81,7 +81,7 @@ export default {
         { text: 'Title', value: 'Title' },
         { text: 'Author', value: 'Author' },
         { text: 'Created', value: 'CreatedAt' },
-        { text: 'Actions' }
+        { text: 'Actions', value: null, sortable: false }
       ],
       pagination: {
         descending: true,

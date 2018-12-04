@@ -38,7 +38,7 @@ $ yarn run generate
 
 ---
 
-### 1. Initialize node.js, nuxt
+### 1. Setup Node.js, Nuxt app
 
 ```bash
 # install nodejs (LTS v8 or v10) https://nodejs.org
@@ -66,16 +66,18 @@ $ yarn run dev
 ---
 
 ### 2. Nuxt Directory Structure
+
 https://nuxtjs.org/guide/directory-structure
+
 ```bash
 assets/
-components/ # shared .vue
+components/    # shared .vue
 layouts/
 middleware/
-pages/ # vue-router (_xx/ this.$route.params.xx)
+pages/         # vue-router $params, $query
 plugins/
-static/ # serve raw file (favicon.ico, robots.txt)
-store/ # vuex
+static/        # serve raw file (favicon.ico, robots.txt)
+store/         # vuex
 nuxt.config.js # webpack (**/* => .html, .js, .css)
 package.json
 ```
@@ -83,6 +85,7 @@ package.json
 ---
 
 ### 3. Vue file `commit 02c7dd2`
+
 https://vuejs.org/v2/guide/single-file-components.html
 
 <small>
@@ -142,12 +145,14 @@ export default {
 ---
 
 /pages/books.vue
-```vue
+
+```html
 <v-btn @click="addRandomBook()">add random book</v-btn>
 <v-btn @click="books = []">clear</v-btn>
 <pre class="hoho">{{ books }}</pre>
 ```
-```vue
+
+```javascript
 data() {
   return {
     books: []
@@ -180,6 +185,7 @@ methods: {
 #### 5-3. Store books to localStorage  `commit b3b539a`
 
 pages/books.vue
+
 ```vue
 import store from 'store'
 
@@ -200,6 +206,7 @@ store.remove('books')
 #### 5-4. Using REST api  `commit 64c7259`
 
 books-go/main.go
+
 ```bash
 $ go build books-go/main.go
 $ ./main
@@ -211,6 +218,7 @@ $ ./main
 ```
 
 pages/books.vue
+
 ```vue
 async addBook(d) {
   let { data } = await this.$axios.post('http://localhost:3010/books', d)
@@ -228,6 +236,7 @@ async fetchBooks() {
 #### 5-5. Using vuex
 
 store/store00.js
+
 ```javascript
 export const state = () => ({ .. })
 export const mutations = { .. }
@@ -236,6 +245,7 @@ export const getters = { .. }
 ```
 
 pages/books.vue
+
 ```vue
 import { mapActions, mapGetters } from 'vuex'
 
@@ -255,7 +265,8 @@ import { mapActions, mapGetters } from 'vuex'
 
 Next ...
 
-- v-datatable
+- v-data-table
 - v-dialog
 - toast
 - Keycloak
+- grid, flex, display, position

@@ -8,7 +8,7 @@
       </v-toolbar-items>
       <v-spacer />
       <v-toolbar-items>
-        <v-btn flat>nothing</v-btn>
+        <v-btn flat>{{ $vuetify.breakpoint.name }}</v-btn>
       </v-toolbar-items>
     </v-toolbar>
 

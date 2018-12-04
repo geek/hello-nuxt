@@ -1,15 +1,32 @@
 <template>
   <v-container>
-    <h1>books</h1>
-    <v-btn @click="addRandomBook()">add random book</v-btn>
-    <v-btn @click="fetchBooks()">fetch books</v-btn>
-    <ul>
-      <li v-for="(d, i) in books" :key="i">
-        <span class="text-capitalize">[{{ d.Author }}]</span>
-        <span class="text-capitalize">{{ d.Title }}</span>
-        ({{ d.CreatedAt | moment('from') }})
-      </li>
-    </ul>
+    <h1>
+      Books
+      <span class="font-weight-light">{{ books.length | '-' }}</span>
+    </h1>
+    <v-layout row wrap>
+      <v-flex xs12 md6>
+        <v-btn flat color="primary" @click="addRandomBook()">add random book</v-btn>
+        <v-btn flat color="primary" @click="fetchBooks()">fetch books</v-btn>
+      </v-flex>
+      <v-flex offset-xs3 xs9 offset-md0 md6>
+        <v-text-field v-model="search" label="Search" />
+      </v-flex>
+    </v-layout>
+    <v-data-table
+      :headers="headers"
+      :items="books"
+      :pagination.sync="pagination"
+      :search="search"
+      must-sort
+      hide-actions
+    >
+      <template slot="items" slot-scope="props">
+        <td class="text-capitalize">{{ props.item.Title }}</td>
+        <td class="text-capitalize">{{ props.item.Author }}</td>
+        <td>{{ props.item.CreatedAt | moment('from') }}</td>
+      </template>
+    </v-data-table>
   </v-container>
 </template>
 
@@ -21,7 +38,18 @@ const debug = require('debug')('pages/books')
 export default {
   data() {
     return {
-      timeout: null
+      timeout: null,
+      search: '',
+      headers: [
+        { text: 'Title', value: 'Title' },
+        { text: 'Author', value: 'Author' },
+        { text: 'Created', value: 'CreatedAt' }
+      ],
+      pagination: {
+        descending: true,
+        rowsPerPage: -1,
+        sortBy: 'CreatedAt'
+      }
     }
   },
   computed: {

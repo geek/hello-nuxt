@@ -237,12 +237,43 @@ async fetchBooks() {
 
 store/store00.js
 
+<div style="font-size: 65%;">
+
 ```javascript
-export const state = () => ({ .. })
-export const mutations = { .. }
-export const actions = { .. }
-export const getters = { .. }
+export const state = () => ({
+  books: []
+})
+
+export const mutations = {
+  RECEIVE_BOOKS(state, data) {
+    state.books = data
+  },
+  ADD_BOOK(state, data) {
+    state.books.push(data)
+  }
+}
+
+export const actions = {
+  async fetchBooks({ commit }) {
+    let { data } = await this.$axios.get('http://localhost:3010/books')
+    commit('RECEIVE_BOOKS', data)
+  },
+  async addBook({ commit }, d) {
+    let { data } = await this.$axios.post('http://localhost:3010/books', d)
+    commit('ADD_BOOK', data)
+  }
+}
+
+export const getters = {
+  books(state) {
+    return state.books
+  }
+}
 ```
+
+</div>
+
+---
 
 pages/books.vue
 
@@ -263,9 +294,66 @@ import { mapActions, mapGetters } from 'vuex'
 
 ---
 
+layouts/default.vue
+
+```html
+// template
+<v-btn flat to="/books">
+  books ({{ books.length || '-' }})
+</v-btn>
+```
+
+```javascript
+import { mapGetters } from 'vuex'
+
+export default {
+  computed: {
+    ...mapGetters({
+      books: 'store00/books'
+    })
+  }
+}
+```
+
+---
+
+#### 5-6. v-data-table
+
+https://vuetifyjs.com/en/components/data-tables
+
+![screenshot](static/forREADME/books03.png)
+
+---
+
+pages/books.vue
+
+```html
+<v-data-table
+  :headers="headers" :items="books" hide-actions
+>
+  <template slot="items" slot-scope="props">
+    <td class="text-capitalize">{{ props.item.Title }}</td>
+    <td class="text-capitalize">{{ props.item.Author }}</td>
+    <td>{{ props.item.CreatedAt | moment('from') }}</td>
+  </template>
+</v-data-table>
+```
+```javascript
+data() {
+  return {
+    headers: [
+      { text: 'Title', value: 'Title' },
+      { text: 'Author', value: 'Author' },
+      { text: 'Created', value: 'CreatedAt' }
+    ]
+  }
+}
+```
+
+---
+
 Next ...
 
-- v-data-table
 - v-dialog
 - toast
 - Keycloak

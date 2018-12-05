@@ -112,7 +112,7 @@ export default {
     }
   },
   async mounted () {
-    let { data } = await this.$axios.get('https://dev.cerescloud.io/version.json'
+    let { data } = await this.$axios.get('https://dev.cerescloud.io/version.json')
     this.haha = data
   }
 }
@@ -143,7 +143,7 @@ export default {
 }
 ```
 
-	$ yarn add random-words debug
+    $ yarn add random-words debug
 
 ---
 
@@ -351,6 +351,7 @@ pages/books.vue
   </template>
 </v-data-table>
 ```
+
 ```javascript
 data() {
   return {
@@ -436,7 +437,7 @@ handleRemoveBook() {
 
 store/store00.js
 
-	$ yarn add lodash
+    $ yarn add lodash
 
 ```javascript
 // mutations
@@ -461,7 +462,7 @@ async removeBook({ commit }, d) {
 
 ![screenshot](static/forREADME/books06.png)
 
-	$ yarn add vue-izitoast
+    $ yarn add vue-izitoast
 
 plugin/vue-izitoast.js
 
@@ -473,6 +474,7 @@ import 'izitoast/dist/css/iziToast.css'
 
 Vue.use(VueIziToast)
 ```
+
 ---
 
 store/store00.js
@@ -495,7 +497,12 @@ async fetchBooks({ commit }) {
 
 ---
 
-### 13. keycloak-js
+### 13. keycloak-js  `commit 8c1e5c1`
+
+![screenshot](static/forREADME/books07.png)
+![screenshot](static/forREADME/books08.png)
+
+---
 
     $ docker run -p 8080:8080 --name keycloak jboss/keycloak
     $ docker exec keycloak keycloak/bin/add-user-keycloak.sh -u user -p pass
@@ -505,7 +512,8 @@ async fetchBooks({ commit }) {
 - Add a new client 'hello-nuxt-client'
 
 static/keycloak.json
-```jason
+
+```json
 {
   "realm": "hello-nuxt",
   "auth-server-url": "http://localhost:8080/auth",
@@ -520,7 +528,7 @@ static/keycloak.json
 
 nuxt.config.js
 
-```
+```json
 router: {
   middleware: ['auth']
 },
@@ -577,6 +585,7 @@ layouts/default.vue
 <v-btn v-if="!isAuthenticated" flat @click="login">login</v-btn>
 <v-btn v-if="isAuthenticated" flat @click="logout">logout</v-btn>
 ```
+
 ```javascript
 import { mapGetters, mapActions } from 'vuex'
 

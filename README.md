@@ -2,17 +2,25 @@
 
 > Vue + Nuxt + Vuetify example project
 
+---
+
+<!-- page_number: true -->
+
 ## References
 
-[Developer Roadmap](https://github.com/kamranahmedse/developer-roadmap) - Frontend, Backend, Devops Roadmap
+Main
 
-[Vue.js](https://vuejs.org) - The Progressive JavaScript Framework
-[Nuxt.js](https://nuxtjs.org) - Universal Vue.js Applications
-[Vuetify](https://vuetifyjs.com) - Material Design Component Framework
+- [Vue.js](https://vuejs.org) - The Progressive JavaScript Framework
+- [Nuxt.js](https://nuxtjs.org) - Universal Vue.js Applications
+- [Vuetify](https://vuetifyjs.com) - Material Design Component Framework
 
-[Vue Router](https://router.vuejs.org) - the official router for Vue.js.
-[Vuex](https://vuex.vuejs.org) - a state management pattern + library for Vue.js.
-[lodash](https://lodash.com) - A modern JavaScript utility library delivering modularity, performance & extras.
+Useful
+
+- [Developer Roadmap](https://github.com/kamranahmedse/developer-roadmap) - Frontend, Backend, Devops Roadmap
+- [Vue Router](https://router.vuejs.org) - the official router for Vue.js.
+- [Vuex](https://vuex.vuejs.org) - a state management pattern + library for Vue.js.
+- [lodash](https://lodash.com) - A modern JavaScript utility library delivering modularity, performance & extras.
+- [axios](https://github.com/axios/axios) - Promise based HTTP client for the browser and node.js
 
 ---
 
@@ -487,9 +495,111 @@ async fetchBooks({ commit }) {
 
 ---
 
+### 13. keycloak-js
+
+    $ docker run -p 8080:8080 --name keycloak jboss/keycloak
+    $ docker exec keycloak keycloak/bin/add-user-keycloak.sh -u user -p pass
+    $ yarn add keycloak-js
+
+- Add a new realm 'hello-nuxt' (User registration: on)
+- Add a new client 'hello-nuxt-client'
+
+static/keycloak.json
+```jason
+{
+  "realm": "hello-nuxt",
+  "auth-server-url": "http://localhost:8080/auth",
+  "ssl-required": "external",
+  "resource": "hello-nuxt-client",
+  "public-client": true,
+  "confidential-port": 0
+}
+```
+
+---
+
+nuxt.config.js
+
+```
+router: {
+  middleware: ['auth']
+},
+```
+
+middleware/auth.js
+
+```javascript
+export default function({ route, store, error }, next) {
+  if (store.state.auth.authenticated) {
+    // authenticated
+    next()
+  } else {
+    // not loggedin
+    if (routeOption(route, 'auth', false)) {
+      // public page, just check sso
+      store.dispatch('auth/checkSSO', next, error)
+    } else {
+      // page need authentication
+      store.dispatch('auth/checkSSOAndLogin', next, error)
+    }
+  }
+```
+
+---
+
+store/auth.js
+
+```javascript
+let keycloakAuth = new Keycloak('/keycloak.json')
+
+export const mutations = {
+  SET_TOKENS: (state, keycloakAuth) => { }
+  SET_USER: (state, user) => { }
+}
+
+export const actions = {
+  login()
+  checkSSO()
+  checkSSOAndLogin()   
+  logout()
+  updateToken()
+  updateProfile()
+}
+```
+
+---
+
+layouts/default.vue
+
+```html
+<v-btn :disabled="!isAuthenticated" flat to="/books">books ({{ books.length || '-' }})</v-btn>
+
+<v-btn v-if="!isAuthenticated" flat @click="login">login</v-btn>
+<v-btn v-if="isAuthenticated" flat @click="logout">logout</v-btn>
+```
+```javascript
+import { mapGetters, mapActions } from 'vuex'
+
+export default {
+  computed: {
+    ...mapGetters({
+      books: 'store00/books',
+      isAuthenticated: 'auth/isAuthenticated'
+    })
+  },
+  methods: {
+    ...mapActions({
+      login: 'auth/login',
+      logout: 'auth/logout'
+    })
+  }
+}
+```
+
+---
+
 Next ...
 
-- keycloak-js
 - nuxt-child
 - grid, flex, display, position
 - components

@@ -17,6 +17,7 @@
     "cross-env": "^5.2.0",
     "debug": "^4.1.0",
     "izitoast": "^1.4.0",
+    "keycloak-js": "^4.7.0",
     "lodash": "^4.17.11",
     "nuxt": "^2.0.0",
     "random-words": "^1.1.0",

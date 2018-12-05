@@ -4176,6 +4176,11 @@ jsonify@~0.0.0:
   resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
   integrity sha1-LHS27kHZPKUbe1qu6PUDYx0lKnM=
 
+keycloak-js@^4.7.0:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/keycloak-js/-/keycloak-js-4.7.0.tgz#b1c753186cad9d8863591b3d2ffff06e75c8277b"
+  integrity sha512-UfVX1X3A7HoRbJhSCm6g/qpU2tS6J9o8RIc6oL32xaoe6x0ZxvQiNzxZFKCOu0PF9bswaQ7tvltaGoPn9faSCg==
+
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-3.2.2.tgz#31ea21a734bab9bbb0f32466d893aea51e4a3c64"

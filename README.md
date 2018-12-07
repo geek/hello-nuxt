@@ -500,16 +500,21 @@ async fetchBooks({ commit }) {
 ### 13. keycloak-js  `commit 8c1e5c1`
 
 ![screenshot](static/forREADME/books07.png)
+
 ![screenshot](static/forREADME/books08.png)
 
 ---
+
+([Nuxt - Auth Module](https://auth.nuxtjs.org))
+
+Setup keycloak
 
     $ docker run -p 8080:8080 --name keycloak jboss/keycloak
     $ docker exec keycloak keycloak/bin/add-user-keycloak.sh -u user -p pass
     $ yarn add keycloak-js
 
-- Add a new realm 'hello-nuxt' (User registration: on)
-- Add a new client 'hello-nuxt-client'
+  - Add a new realm 'hello-nuxt' (User registration: on)
+  - Add a new client 'hello-nuxt-client'
 
 static/keycloak.json
 
@@ -528,7 +533,7 @@ static/keycloak.json
 
 nuxt.config.js
 
-```json
+```javascript
 router: {
   middleware: ['auth']
 },
@@ -607,8 +612,13 @@ export default {
 
 ---
 
+### 14. pages/
+
+![screenshot](static/forREADME/books09.png)
+
+---
+
 Next ...
 
-- nuxt-child
-- grid, flex, display, position
 - components
+- examples (https://nuxtjs.org/examples)

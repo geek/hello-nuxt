@@ -21,7 +21,7 @@ export const mutations = {
 export const actions = {
   async fetchBooks({ commit }) {
     try {
-      let data = await this.$axios.$get('http://localhost:3010/books')
+      let data = await this.$axios.$get('/books')
       commit('RECEIVE_BOOKS', data)
     } catch (e) {
       let message = 'Failed to get books'
@@ -33,7 +33,7 @@ export const actions = {
   },
   async addBook({ commit }, d) {
     try {
-      let data = await this.$axios.$post('http://localhost:3010/books', d)
+      let data = await this.$axios.$post('/books', d)
       commit('ADD_BOOK', data)
       this.$toast.success('Added')
     } catch (e) {
@@ -46,7 +46,7 @@ export const actions = {
   },
   async removeBook({ commit }, d) {
     try {
-      await this.$axios.$delete(`http://localhost:3010/books/${d.ID}`)
+      await this.$axios.$delete(`/books/${d.ID}`)
       commit('REMOVE_BOOK', d)
       this.$toast.success('Removed')
     } catch (e) {

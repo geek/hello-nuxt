@@ -1,14 +1,12 @@
 <template>
   <v-container>
-    <h1>
+    <h1 class="display-2 mb-5">
       Books
       <span class="font-weight-light">{{ books.length || '-' }}</span>
     </h1>
     <v-layout row wrap>
       <v-flex xs12 md6>
         <v-btn flat color="primary" @click="dialogAdd = true">add book</v-btn>
-        <v-btn flat color="primary" @click="addRandomBook()">add random book</v-btn>
-        <v-btn flat color="primary" @click="fetchBooks()">fetch books</v-btn>
       </v-flex>
       <v-flex offset-xs3 xs9 offset-md0 md6>
         <v-text-field v-model="search" label="Search" />
@@ -23,7 +21,11 @@
       hide-actions
     >
       <template slot="items" slot-scope="props">
-        <td class="text-capitalize">{{ props.item.Title }}</td>
+        <td class="text-capitalize">
+          <nuxt-link :to="`/home/books/${props.item.ID}`">
+            {{ props.item.Title }}
+          </nuxt-link>
+        </td>
         <td class="text-capitalize">{{ props.item.Author }}</td>
         <td>{{ props.item.CreatedAt | moment('from') }}</td>
         <td><v-btn flat small color="red" @click="openRemoveDialog(props.item)">Remove</v-btn></td>
@@ -136,9 +138,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.hoho {
-  color: steelblue;
-}
-</style>

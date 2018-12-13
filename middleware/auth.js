@@ -32,22 +32,4 @@ export default function({ route, store, error }, next) {
       store.dispatch('auth/checkSSOAndLogin', next, error)
     }
   }
-  // // check page option { 'auth': false }
-  // if (routeOption(route, 'auth', false)) {
-  //   if (!store.state.auth.authenticated) {
-  //     // public page and not authenticated. check sso
-  //     debug('dispatch auth/checkSSO')
-  //     store.dispatch('auth/checkSSO', next, error)
-  //   } else {
-  //     // public page and authenticated.
-  //     next()
-  //   }
-  // } else if (store.state.auth.authenticated) {
-  //   // private page and authenticated.
-  //   next()
-  // } else {
-  //   // private page and not authenticated. need to login
-  //   debug('dispatch auth/login')
-  //   store.dispatch('auth/login', next, error)
-  // }
 }

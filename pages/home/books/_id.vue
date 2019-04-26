@@ -51,7 +51,7 @@ export default {
     }),
     p: _.property,
     findBook() {
-      this.book = _.find(this.books, ['ID', parseInt(this.$route.params.id)])
+      this.book = _.find(this.books, ['ID', this.$route.params.id])
     }
   }
 }

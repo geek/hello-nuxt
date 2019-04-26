@@ -41,6 +41,28 @@ $ yarn start
 $ yarn run generate
 ```
 
+### How To Run Servers
+
+#### Go
+
+```bash
+# Install Go
+
+# Build go server
+$ cd books-go
+$ go build
+
+# Start Go Server
+$ ./hello-nuxt
+```
+
+#### Client-API
+
+```bash
+# Start Client-API
+$ yarn run client-api
+```
+
 ---
 
 ## Step-by-step
@@ -212,7 +234,7 @@ store.remove('books')
 
 ---
 
-### 8. Store to backend - REST API  `commit 64c7259`
+### 8. Store to backend - GraphQL and REST API  `commit 64c7259`
 
 books-go/main.go
 
@@ -230,17 +252,48 @@ $ ./main
 
 </small>
 
+client-api/server.js
+
+<small>
+
+```bash
+$ yarn run client-api
+# {"level":30,"time":1556295773321,"pid":56688,"hostname":"joyadmins-MacBook-Pro.local","created":1556295773275,"started":1556295773307,"host":"joyadmins-MacBook-Pro.local","port":3001,"protocol":"http","id":"joyadmins-MacBook-Pro.local:56688:juyabk2j","uri":"http://joyadmins-MacBook-Pro.local:3001","address":"0.0.0.0","msg":"server started","v":1}
+```
+
+</small>
+
+
 pages/books.vue
 
 ```vue
 async addBook(d) {
-  let { data } = await this.$axios.post('http://localhost:3010/books', d)
-  this.books.push(data)
+  let { data } = await this.$axios.post('http://localhost:3001/graphql', {
+    query: `mutation CreateBook($Author: String, $Title: String) {
+      createBook(Author: $Author, Title: $Title) {
+        ID
+        Author
+        Title
+        CreatedAt
+      }
+    }`,
+    variables: d
+  })
+  this.books.push(data.createBook)
 },
 
 async fetchBooks() {
-  let { data } = await this.$axios.get('http://localhost:3010/books')
-  this.books = data
+  let { data } = await this.$axios.post('http://localhost:3001/graphql', {
+    query: `query GetBooks {
+      getBooks {
+        ID
+        Author
+        Title
+        CreatedAt
+      }
+    }`
+  })
+  this.books = data.getBooks
 }
 ```
 
@@ -268,12 +321,32 @@ export const mutations = {
 
 export const actions = {
   async fetchBooks({ commit }) {
-    let { data } = await this.$axios.get('http://localhost:3010/books')
-    commit('RECEIVE_BOOKS', data)
+    let { data } = await this.$axios.post('http://localhost:3001/graphql', {
+      query: `query GetBooks {
+        getBooks {
+          ID
+          Author
+          Title
+          CreatedAt
+        }
+      }`
+    })
+    commit('RECEIVE_BOOKS', data.getBooks)
   },
   async addBook({ commit }, d) {
-    let { data } = await this.$axios.post('http://localhost:3010/books', d)
-    commit('ADD_BOOK', data)
+    let { data } = await this.$axios.post('http://localhost:3001/graphql', {
+      query: `mutation CreateBook($Author: String, $Title: String) {
+        createBook(Author: $Author, Title: $Title) {
+          ID
+          Author
+          Title
+          CreatedAt
+        }
+      }`,
+      variables: d
+    })
+
+    commit('ADD_BOOK', data.createBook)
   }
 }
 
@@ -403,7 +476,7 @@ pages/books.vue - template
 ```html
 <td>
   <v-btn
-    flat small color="red" 
+    flat small color="red"
     @click="openRemoveDialog(props.item)"
   >Remove</v-btn>
 ></td>
@@ -449,9 +522,13 @@ REMOVE_BOOK(state, data) {
 
 // actions
 async removeBook({ commit }, d) {
-  let { data } = await this.$axios.delete(
-    `http://localhost:3010/books/${d.ID}`
-  )
+  await this.$axios.$post('http://localhost:3001/graphql', {
+    query: `mutation DeleteBook($ID: ID!) {
+      deleteBook(ID: $ID) { ID }
+    }`,
+    variables: d
+  })
+
   commit('REMOVE_BOOK', d)
 }
 ```
@@ -482,12 +559,21 @@ store/store00.js
 ```javascript
 async fetchBooks({ commit }) {
   try {
-    let data = await this.$axios.$get('http://localhost:3010/books')
-    commit('RECEIVE_BOOKS', data)
+    let { data } = await this.$axios.post('http://localhost:3001/graphql', {
+      query: `query GetBooks {
+        getBooks {
+          ID
+          Author
+          Title
+          CreatedAt
+        }
+      }`
+    })
+    commit('RECEIVE_BOOKS', data.getBooks)
   } catch (e) {
     let message = 'Failed to get books'
     if (e.response) {
-      message += `<p>${e.response.status}: 
+      message += `<p>${e.response.status}:
         ${e.response.data.message}</p>`
     }
     this.$toast.error(message)
@@ -573,7 +659,7 @@ export const mutations = {
 export const actions = {
   login()
   checkSSO()
-  checkSSOAndLogin()   
+  checkSSOAndLogin()
   logout()
   updateToken()
   updateProfile()

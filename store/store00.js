@@ -18,11 +18,37 @@ export const mutations = {
   }
 }
 
+const kQueries = {
+  // Notice that Content isn't included because we aren't using it in the page
+  getBooks: `query GetBooks {
+    getBooks {
+      ID
+      Author
+      Title
+      CreatedAt
+    }
+  }`,
+  createBook: `mutation CreateBook($Author: String, $Title: String) {
+    createBook(Author: $Author, Title: $Title) {
+      ID
+      Author
+      Title
+      CreatedAt
+    }
+  }`,
+  deleteBook: `mutation DeleteBook($ID: ID!) {
+    deleteBook(ID: $ID) { ID }
+  }`
+}
+
 export const actions = {
   async fetchBooks({ commit }) {
     try {
-      let data = await this.$axios.$get('/books')
-      commit('RECEIVE_BOOKS', data)
+      let { data } = await this.$axios.$post('', {
+        query: kQueries.getBooks
+      })
+      commit('RECEIVE_BOOKS', data.getBooks)
+      console.log(data.getBooks)
     } catch (e) {
       let message = 'Failed to get books'
       if (e.response) {
@@ -33,8 +59,11 @@ export const actions = {
   },
   async addBook({ commit }, d) {
     try {
-      let data = await this.$axios.$post('/books', d)
-      commit('ADD_BOOK', data)
+      let { data } = await this.$axios.$post('', {
+        query: kQueries.createBook,
+        variables: d
+      })
+      commit('ADD_BOOK', data.createBook)
       this.$toast.success('Added')
     } catch (e) {
       let message = 'Failed to add book'
@@ -46,7 +75,11 @@ export const actions = {
   },
   async removeBook({ commit }, d) {
     try {
-      await this.$axios.$delete(`/books/${d.ID}`)
+      await this.$axios.$post('', {
+        query: kQueries.deleteBook,
+        variables: d
+      })
+
       commit('REMOVE_BOOK', d)
       this.$toast.success('Removed')
     } catch (e) {

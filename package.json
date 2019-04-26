@@ -8,6 +8,7 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
+    "start-api": "node client-api/server.js",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "precommit": "npm run lint"
@@ -16,14 +17,19 @@
     "@nuxtjs/axios": "^5.0.0",
     "cross-env": "^5.2.0",
     "debug": "^4.1.0",
+    "graphi": "8.1.0",
+    "hapi": "18.1.0",
+    "hapi-pino": "5.4.1",
     "izitoast": "^1.4.0",
+    "keycloak-hapi": "1.2.0",
     "keycloak-js": "^4.7.0",
     "lodash": "^4.17.11",
     "nuxt": "^2.0.0",
     "random-words": "^1.1.0",
     "store": "^2.0.12",
     "vue-moment": "^4.0.0",
-    "vuetify": "^1.3.12"
+    "vuetify": "^1.3.12",
+    "wreck": "14.2.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
